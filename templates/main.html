@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flask Auth Example</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Search Books:</h1>
+        <form method="POST" action='/main'>
+            <input class="form-control form-control-lg" type="text" name="search" placeholder="ISBN / Title / Author" autofocus="">
+            <br>
+            <button class="btn btn-primary btn-lg">Search</button>
+        </form>
+        <br><br>
+        {% if books %}
+        <h1 class="subtitle">Result:</h1>
+
+            {% for book in books %}
+            <div class="list-group">
+                <a href="{{ url_for('books', book_id=book.id) }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h2 class="mb-1">{{ book.title }}</h2>
+                    </div>
+                    <p class="mb-1">{{ book.author }}</p>
+                </a>
+                <!-- <ul>
+                    <li><b><a href="{{ url_for('books', book_id=book.id) }}">{{ book.title }}</b> - {{ book.author }}</a></li>
+                </ul> -->
+            </div>
+            {% endfor %}
+        {% endif %}
+    
+        {% if message %}
+            <h3>{{ message }}</h3>
+        {% endif %}
+    </div>
+</body>
+
+</html>
