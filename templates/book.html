@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flask Auth Example</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        Logged in as: {{ user }}
+        <h1>Book details:</h1>
+        <ul>
+            <li><p><b>Title: {{ book.title }}</b></p></li>
+            <li><p><b>Author:</b> {{ book.author }}</p></li>
+            <li><p><b>Year:</b> {{ book.year }}</p></li>
+            <li><p><b>ISBN:</b> {{ book.isbn }}</p></li>
+        </ul>
+        <br><br><br>
+        <h3>Reviews: </h3>
+        {% if reviews %}
+            {% for review in reviews %}
+            <ul>    
+                {% if review.email == user %}
+                <h5>My Review</h5>
+                <li><b>Rating:</b> {{ review.rating }} </li>
+                <li> {{ review.comments }} </li>
+                <li> {{ review.created_date }} </li>
+                x{{ book.id }}
+                xx{{ review[0] }}
+                <a href="{{url_for('delete_review', book_id = book.id, review_id = review[0] )}}" class="btn btn-danger btn-sm">Delete</a> <!--STOPED HERE!!! REVIEW ID IS NOT GIVING THE CORRECT NUMBER (26). IT IS PROBABLY PICKING THE WRONG COLUMN FROM THE JOIN -->
+                {% else %}
+                <li><b>Name:</b> {{ review.name }} {{ user }}</li>
+                <li><b>Rating:</b> {{ review.rating }} </li>
+                <li> {{ review.comments }} </li>
+                <li> {{ review.created_date }} </li>
+                {% endif %}
+            </ul>
+            {% endfor %}
+        {% else %}
+            <p>No reviews for this book.</p>    
+        {% endif %}
+        <br><br>
+
+
+        {% if enable_review == False %}
+        <h3>Submit a review:</h3>
+        <div class="row">
+            <form method="POST" action="{{url_for('add_review', book_id=book.id, user_id='2')}}">
+            
+            <!--Rating-->
+            <div class="rate">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="text">1 star</label>
+            </div>
+            <!--End rating-->
+            
+            <textarea  class="form-control" rows="3" name="comments" placeholder="Review..."></textarea>
+            <br>
+            <div class="buttons">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

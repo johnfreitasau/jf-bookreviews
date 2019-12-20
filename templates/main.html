@@ -12,6 +12,8 @@
 
 <body>
     <div class="container">
+        Logged in as {{user}}
+        <button onclick="window.open('http://localhost:5000/dropsession')" type="submit">Logout</button>
         <h1 class="title">Search Books:</h1>
         <form method="POST" action='/main'>
             <input class="form-control form-control-lg" type="text" name="search" placeholder="ISBN / Title / Author" autofocus="">
