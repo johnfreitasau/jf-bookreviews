@@ -1,42 +1,95 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flask Auth Example</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block content %}
     <div class="container">
-        Logged in as: {{ user }}
         <h1>Book details:</h1>
         <ul>
-            <li><p><b>Title: {{ book.title }}</b></p></li>
-            <li><p><b>Author:</b> {{ book.author }}</p></li>
-            <li><p><b>Year:</b> {{ book.year }}</p></li>
-            <li><p><b>ISBN:</b> {{ book.isbn }}</p></li>
+            <div class="form-group row">
+                <h3 class="col-sm-4 col-form-label text-right">{{ book.title }}</h3>
+                <div class="col-md-8">
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-right">Author:</label>
+                <div class="col-sm-8">
+                    {{ book.author }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-right">Year:</label>
+                <div class="col-sm-8">
+                    {{ book.year }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-right">ISBN:</label>
+                <div class="col-sm-8">
+                    {{ book.isbn }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-right">Rating (avg):</label>
+                <div class="col-sm-8">
+                    {{ average_rating[0] }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-right">Average rating from GoodReaders website:</label>
+                <div class="col-sm-8">
+                    {{ average_rating }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-right">work ratings count from GoodReaders website:</label>
+                <div class="col-sm-8">
+                    {{ work_ratings_count }}
+                </div>
+            </div>            
         </ul>
         <br><br><br>
         <h3>Reviews: </h3>
         {% if reviews %}
-            {% for review in reviews %}
-            <ul>    
-                {% if review.email == user %}
-                <h5>My Review</h5>
-                <li><b>Rating:</b> {{ review.rating }} </li>
-                <li> {{ review.comments }} </li>
-                <li> {{ review.created_date }} </li>
-                x{{ book.id }}
-                xx{{ review[0] }}
-                <a href="{{url_for('delete_review', book_id = book.id, review_id = review[0] )}}" class="btn btn-danger btn-sm">Delete</a> <!--STOPED HERE!!! REVIEW ID IS NOT GIVING THE CORRECT NUMBER (26). IT IS PROBABLY PICKING THE WRONG COLUMN FROM THE JOIN -->
+            {% for review in reviews %}    
+                {% if review.user_id == user_id %}
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-right">Sent by me</label>
+                    <div class="col-sm-8">
+                        <a href="{{url_for('delete_review', book_id = book.id, review_id = review[0] )}}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-right">Rating:</label>
+                    <div class="col-sm-8">
+                        {{ review.rating }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-right">Review:</label>
+                    <div class="col-sm-8">
+                        {{ review.comments }}
+                    </div>
+                </div>
+                
                 {% else %}
-                <li><b>Name:</b> {{ review.name }} {{ user }}</li>
-                <li><b>Rating:</b> {{ review.rating }} </li>
-                <li> {{ review.comments }} </li>
-                <li> {{ review.created_date }} </li>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-right">Name:</label>
+                    <div class="col-sm-8">
+                        {{ review.name }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-right">Rating:</label>
+                    <div class="col-sm-8">
+                        {{ review.rating }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-right">Comments:</label>
+                    <div class="col-sm-8">
+                        {{ review.comments }}
+                    </div>
+                </div>
                 {% endif %}
             </ul>
             {% endfor %}
@@ -44,16 +97,12 @@
             <p>No reviews for this book.</p>    
         {% endif %}
         <br><br>
-
-
         {% if enable_review == False %}
         <h3>Submit a review:</h3>
         <div class="row">
-            <form method="POST" action="{{url_for('add_review', book_id=book.id, user_id='2')}}">
-            
-            <!--Rating-->
+            <form method="POST" action="{{url_for('add_review', book_id=book.id, user_id=user_id)}}">
             <div class="rate">
-                <input type="radio" id="star5" name="rating" value="5" />
+                <input type="radio" id="star5" name="rating" value="5" required />
                 <label for="star5" title="text">5 stars</label>
                 <input type="radio" id="star4" name="rating" value="4" />
                 <label for="star4" title="text">4 stars</label>
@@ -64,8 +113,6 @@
                 <input type="radio" id="star1" name="rating" value="1" />
                 <label for="star1" title="text">1 star</label>
             </div>
-            <!--End rating-->
-            
             <textarea  class="form-control" rows="3" name="comments" placeholder="Review..."></textarea>
             <br>
             <div class="buttons">
@@ -74,6 +121,4 @@
         </form>
         </div>
         {% endif %}
-    </div>
-</body>
-</html>
+{% endblock %}
