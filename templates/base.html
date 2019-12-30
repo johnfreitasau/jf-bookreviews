@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JF Book Reviews</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+</head>
+
+<body>
+    <section class="hero is-primary is-fullheight">
+        <div class="hero-head">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                  <div class="navbar-header">
+                    <a class="navbar-brand" href="#">JF Book Reviews</a>
+                  </div>
+                  <ul class="nav navbar-nav">
+                    {% if user_id %}
+                    <li class="active">
+                        <a href="{{ url_for('main') }}" class="navbar-item">
+                            Home
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if not user_id %}
+                    <li>
+                        <a href="{{ url_for('index') }}" class="navbar-item">
+                            Login
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('register') }}" class="navbar-item">
+                            Sign Up
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_id %}
+                    <li>
+                        <a href="{{ url_for('dropsession')}}" type="submit" class="navbar-item">
+                            Logout
+                        </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                  {% if user_id %}
+                    <h6 class="pull-right">Logged in as <span class="navbar-item label label-default">{{user_id}}</span></h6>
+                  {% endif %}
+                </div>
+              </nav>
+        </div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+               {% block content %}
+               {% endblock %}
+            </div>
+        </div>
+    </section>
+</body>
+</html>
