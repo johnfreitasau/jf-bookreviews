@@ -67,4 +67,4 @@ TBA
 
 ## Authors / Contributing
 
-* **John Freitas** - *Initial work* - [PurpleBooth](https://github.com/me50/johnfreitasau)
+* **John Freitas** - *Initial work* - [JF Github](https://github.com/me50/johnfreitasau)
